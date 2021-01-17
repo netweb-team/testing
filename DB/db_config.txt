@@ -1,0 +1,5 @@
+host=localhost 
+user=redtech 
+password=red_tech 
+dbname=comred 
+port=5432
