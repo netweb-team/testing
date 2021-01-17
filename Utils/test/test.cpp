@@ -7,7 +7,7 @@ using ::testing::DoAll;
 using ::testing::Return;
 using ::testing::SetArgReferee;
 
-#include "BaseChange.h"
+#include "Change.h"
 #include "Document.h"
 #include "../../ServerApplication/include/Editor.h"
 #include "../../ServerApplication/include/EditorManager.h"

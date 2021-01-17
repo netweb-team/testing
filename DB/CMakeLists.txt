@@ -12,9 +12,9 @@ file(GLOB SRC
         "${PROJECT_SOURCE_DIR}/src/*.cpp"
         )
 
-file(GLOB TEST_SRC
-        ${PROJECT_SOURCE_DIR}/test/testDB.cpp
-)
+#file(GLOB TEST_SRC
+#        ${PROJECT_SOURCE_DIR}/test/testDB.cpp
+#)
 
 add_library(DB STATIC ${SRC})
 target_include_directories(DB PUBLIC ${PROJECT_SOURCE_DIR}/src)
@@ -25,11 +25,11 @@ target_include_directories(DB PRIVATE ${PostgreSQL_INCLUDE_DIRS})
 target_link_libraries(DB PRIVATE ${PostgreSQL_LIBRARIES} -lpqxx -lpq)
 target_link_libraries(DB PRIVATE Utils)
 
-add_executable(test_db ${TEST_SRC})
-target_link_libraries(test_db
-                        DB
-                        Utils
-                        ServerApplication
-)
-target_link_libraries(test_db ${GTEST_LIBRARIES} pthread)
-target_link_libraries(test_db -lgmock)
+#add_executable(test_db ${TEST_SRC})
+#target_link_libraries(test_db
+#                        DB
+#                        Utils
+#                        ServerApplication
+#)
+#target_link_libraries(test_db ${GTEST_LIBRARIES} pthread)
+#target_link_libraries(test_db -lgmock)

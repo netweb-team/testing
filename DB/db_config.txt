@@ -1,5 +1,5 @@
 host=localhost 
-user=redtech 
-password=red_tech 
+user=postgres
+password=12345678
 dbname=comred 
-port=5432
+port=5431
