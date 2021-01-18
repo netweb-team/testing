@@ -12,6 +12,9 @@ file(GLOB sources
 #        "${PROJECT_SOURCE_DIR}/test/*.cpp"
 #        )
 
+set(PQXX_AND_PQ_FLAGS "-I/usr/local/include -L/usr/local/lib")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PQXX_AND_PQ_FLAGS}")
+
 add_library(ServerApplication STATIC ${sources} src/Editor.cpp include/EditorManagerDelegate.h include/EditorListener.h)
 target_include_directories(ServerApplication PUBLIC ${PROJECT_SOURCE_DIR}/src)
 target_link_libraries(ServerApplication PUBLIC Utils DB)

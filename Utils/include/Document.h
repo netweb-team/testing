@@ -23,7 +23,7 @@ public:
             
     Document(int idDocument, const std::string& pass, const std::string& textDocument):
             id(idDocument),
-            password{pass},
+            name{pass},
             text{textDocument} { };
 
     Document(std::shared_ptr<Document>& document) :
