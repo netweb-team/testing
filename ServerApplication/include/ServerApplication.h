@@ -12,23 +12,42 @@ enum class ApplicationErrors {
     success,
 };
 
+union param
+{
+    int num;
+    char *str;
+};
+
+struct DocumentParams 
+{
+    param p1;
+    param p2;
+    param p3;
+    param p4;
+};
+
+struct UserParams
+{
+    param p1;
+    param p2;
+};
+
 class BaseServerApplication {
 public:
     BaseServerApplication() = default;
     virtual ~BaseServerApplication() { }
-    virtual std::pair<ApplicationErrors, std::string> createDocument(int editorId, std::string documentName) = 0;
-    virtual std::pair<ApplicationErrors, std::string> updateDocument(int editorId, int docId, int cursorPosition, std::string operations) = 0;
-    virtual std::pair<ApplicationErrors, std::string> getTextDocument(int docId) = 0;
-    virtual std::pair<ApplicationErrors, std::string> deleteDocument(int editorId, int docId) = 0;
-    virtual std::pair<ApplicationErrors, std::string> readDocument(std::string userData, int docId) = 0;
-    virtual std::pair<ApplicationErrors, std::string> connectDocument(int editorId, int docId) = 0;
-    virtual std::pair<ApplicationErrors, std::string> saveDocument(int docId) = 0;
-    virtual std::pair<ApplicationErrors, std::string> loginUser(std::string userData) = 0;
-    virtual std::pair<ApplicationErrors, std::string> registerUser(std::string userData) = 0;
-    virtual std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) = 0;
-    virtual std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) = 0;
+    virtual std::pair<ApplicationErrors, std::string> createDocument(DocumentParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> updateDocument(DocumentParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> getTextDocument(DocumentParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> deleteDocument(DocumentParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> connectDocument(DocumentParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> saveDocument(DocumentParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> loginUser(UserParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> registerUser(UserParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> logoutUser(UserParams& prm) = 0;
+    virtual std::pair<ApplicationErrors, std::string> updateUser(UserParams& prm) = 0;
 
-    virtual std::pair<ApplicationErrors, std::string> disconnectDocument(int editorId, int docId) = 0;
+    virtual std::pair<ApplicationErrors, std::string> disconnectDocument(DocumentParams& prm) = 0;
 
 };
 
@@ -50,19 +69,18 @@ public:
         return instance;
     }
 
-    std::pair<ApplicationErrors, std::string> createDocument(int editorId, std::string documentName) override;
-    std::pair<ApplicationErrors, std::string> updateDocument(int editorId, int docId, int cursorPosition, std::string operations) override;
-    std::pair<ApplicationErrors, std::string> getTextDocument(int docId) override;
-    std::pair<ApplicationErrors, std::string> deleteDocument(int editorId, int docId) override;
-    std::pair<ApplicationErrors, std::string> readDocument(std::string userData, int docId) override;
-    std::pair<ApplicationErrors, std::string> connectDocument(int editorId, int docId) override;
-    std::pair<ApplicationErrors, std::string> saveDocument(int docId) override;
-    std::pair<ApplicationErrors, std::string> loginUser(std::string userData) override;
-    std::pair<ApplicationErrors, std::string> registerUser(std::string userData) override;
-    std::pair<ApplicationErrors, std::string> logoutUser(std::string userData) override;
-    std::pair<ApplicationErrors, std::string> updateUser(std::string userData, std::string newUserData) override;
+    std::pair<ApplicationErrors, std::string> createDocument(DocumentParams& prm) override;
+    std::pair<ApplicationErrors, std::string> updateDocument(DocumentParams& prm) override;
+    std::pair<ApplicationErrors, std::string> getTextDocument(DocumentParams& prm) override;
+    std::pair<ApplicationErrors, std::string> deleteDocument(DocumentParams& prm) override;
+    std::pair<ApplicationErrors, std::string> connectDocument(DocumentParams& prm) override;
+    std::pair<ApplicationErrors, std::string> saveDocument(DocumentParams& prm) override;
+    std::pair<ApplicationErrors, std::string> loginUser(UserParams& prm) override;
+    std::pair<ApplicationErrors, std::string> registerUser(UserParams& prm) override;
+    std::pair<ApplicationErrors, std::string> logoutUser(UserParams& prm) override;
+    std::pair<ApplicationErrors, std::string> updateUser(UserParams& prm) override;
 
-    std::pair<ApplicationErrors, std::string> disconnectDocument(int editorId, int docId) override;
+    std::pair<ApplicationErrors, std::string> disconnectDocument(DocumentParams& prm) override;
 
 private:
     static std::shared_ptr<ServerApplication> instance;

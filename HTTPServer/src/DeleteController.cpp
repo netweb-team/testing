@@ -6,6 +6,7 @@ ServerApplicationOut DeleteController::handle(const string &body) {
   std::istringstream is;
   int editorId, documentId;
   is >> editorId >> documentId;
-  return ServerApplication::get_instance()->deleteDocument(editorId, documentId);
+  DocumentParams del = { editorId, documentId };
+  return ServerApplication::get_instance()->deleteDocument(del);
 }
 }

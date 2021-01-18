@@ -8,6 +8,8 @@ ServerApplicationOut EditController::handle(const std::string &body) {
   ss >> editorId >> documentId >> cursorPosition;
   ss.ignore(1);
   getline(ss, operations);
-  return ServerApplication::get_instance()->updateDocument(editorId, documentId, cursorPosition, operations);
+  DocumentParams edit = { editorId, documentId, NULL, cursorPosition };
+  edit.p3.str = (char*) operations.c_str();
+  return ServerApplication::get_instance()->updateDocument(edit);
 }
 }

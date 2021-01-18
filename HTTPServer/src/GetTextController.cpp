@@ -5,6 +5,7 @@ ServerApplicationOut GetTextController::handle(const string &body) {
   std::istringstream ss(body);
   int documentId;
   ss >> documentId;
-  return ServerApplication::get_instance()->getTextDocument(documentId);
+  DocumentParams getText = { documentId };
+  return ServerApplication::get_instance()->getTextDocument(getText);
 }
 }

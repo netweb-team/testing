@@ -8,6 +8,8 @@ ServerApplicationOut CreateController::handle(const string &body) {
   ss >> documentId;
   ss.ignore(1);
   getline(ss, documentName);
-  return ServerApplication::get_instance()->createDocument(documentId, documentName);
+  DocumentParams create = { documentId };
+  create.p2.str = (char*) documentName.c_str();
+  return ServerApplication::get_instance()->createDocument(create);
 }
 }
