@@ -21,6 +21,7 @@ public:
     Operation();
 
     Operation(const Operation& newOp);
+    Operation(int id, int revision, size_t before, size_t after, std::vector<Change> ops);
 
     Operation& operator=(const Operation& newOp);
 

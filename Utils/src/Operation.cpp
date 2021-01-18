@@ -13,6 +13,15 @@ Operation::Operation(const Operation& newOp) {
     ops = newOp.ops;
 }
 
+Operation::Operation(int id, int revision, size_t before, size_t after, std::vector<Change> ops) {
+    this->lenAfterOperation = after;
+    this->lenBeforeOperation = before;
+    this->revision = revision;
+    this->idEditor = id;
+    this->ops = ops;
+}
+
+
 Operation& Operation::operator=(const Operation& newOp) {
     lenAfterOperation = newOp.getLenAfterOperation();
     lenBeforeOperation = newOp.getLenBeforeOperation();
