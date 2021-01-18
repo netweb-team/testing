@@ -10,9 +10,10 @@ void DocumentRepository::createDoc(Document& d)
     vector<vector<string>> query_result = {};
     string query1 =
             (boost::format(
-                    "INSERT INTO document VALUES(%1%, '%2%');")
+                    "INSERT INTO document VALUES(%1%, '%2%', '%3%');")
              % "default"
              % d.getText()
+             % d.getName()
             ).str();
     string query2 =
             (boost::format(
@@ -35,8 +36,9 @@ void DocumentRepository::changeDoc(Document& d)
     vector<vector<string>> query_result = {};
     string query =
             (boost::format(
-                    "UPDATE document SET dtext = '%1%' WHERE id = %2%;")
+                    "UPDATE document SET dtext = '%1%', name = '%2%' WHERE id = %3%;")
              % d.getText()
+             % d.getName()
              % d.getId()
             ).str();
     if (db)

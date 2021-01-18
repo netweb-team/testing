@@ -10,15 +10,12 @@ void UserRepository::createUser(User& u)
     vector<vector<string>> query_result = {};
     string query1 =
             (boost::format(
-                    "INSERT INTO users VALUES(%1%, '%2%', '%3');")
+                    "INSERT INTO users VALUES(%1%, '%2%', '%3%', true);")
              % "default"
              % u.getName()
              % u.getPassword()
             ).str();
-    string query2 =
-            (boost::format(
-                    "SELECT max(id) FROM users;")
-            ).str();
+    string query2 = "SELECT max(id) FROM users;";
     if (db)
     {
         if (db->runQuery(query1, query_result) != true)
@@ -51,6 +48,7 @@ shared_ptr<User> UserRepository::getById(int id)
     user->setId(stoi(query_result[0][0]));
     user->setName(query_result[0][1]);
     user->setPassword(query_result[0][2]);
+    
     return user;
 }
 
@@ -59,9 +57,10 @@ void UserRepository::updateUser(User& u)
     vector<vector<string>> query_result = {};
     string query =
             (boost::format(
-                    "UPDATE users SET username = '%1%', password = '%2%' WHERE id = %3%;")
+                    "UPDATE users SET username = '%1%', password = '%2%', is_login = %3% WHERE id = %4%;")
              % u.getName()
              % u.getPassword()
+             % boost::io::group(std::boolalpha, u.getIsLogin())
              % u.getId()
             ).str();
     if (db)
@@ -71,4 +70,25 @@ void UserRepository::updateUser(User& u)
     }
     else
         throw runtime_error("no db controller.");
+}
+
+void UserRepository::checkUser(User& u)
+{
+    vector<vector<string>> query_result = {};
+    string query =
+            (boost::format(
+                    "SELECT * FROM users WHERE username = '%1%' AND password = '%2%';")
+             % u.getName()
+             % u.getPassword()
+            ).str();
+    if (db)
+    {
+        if (db->runQuery(query, query_result) != true)
+            throw runtime_error("cannot get user.");
+    }
+    else
+        throw runtime_error("no db controller.");
+
+    u.setId(stoi(query_result[0][0]));
+    query_result[0][3] == "t" ? u.setIsLogin(true) : u.setIsLogin(false);
 }

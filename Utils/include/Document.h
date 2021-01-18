@@ -13,19 +13,17 @@ public:
     Document() {}
     Document(int idDocument,
              const std::string& textDocument): id(idDocument),
-                                               password(std::string()),
+                                               name(std::string()),
                                                text{textDocument} { };
 
     Document(int idDocument, std::string&& textDocument):
             id(idDocument),
-            password(std::string()),
+            name(std::string()),
             text{std::move(textDocument)} { };
 
-    Document(const Document &document): id(document.id), password(document.password), text(document.text)
-    { }
-
-    Document(std::shared_ptr<Document> document): id(document->id), password(document->password), text(document->text)
-    { }
+    Document(std::shared_ptr<Document>& document) :
+            id(document->getId()), text(document->getText()),
+            name(document->getName()) {}
 
     ~Document() {
     }
@@ -40,10 +38,14 @@ public:
 
     void addOwner(int idEditor);
 
+    std::string getName(void);
+
+    void setName(const std::string& newName);
+
 private:
     int id;
     std::string text;
-    std::string password;
+    std::string name;
     std::vector<int> owners;
 };
 

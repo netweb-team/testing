@@ -2,6 +2,7 @@
 
 std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(DocumentParams& prm) {
     Document doc;
+    doc.setName(prm.p2.str);
     try {
         docRepository->createDoc(doc);
     } catch(const std::exception& error) {
@@ -108,18 +109,79 @@ std::pair<ApplicationErrors, std::string> ServerApplication::saveDocument(Docume
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(UserParams& prm) {
-    return std::make_pair(ApplicationErrors::success, "User was successfully logined");
+    User user;
+    user.setName(prm.p1.str);
+    user.setPassword(prm.p2.str);
+    try {
+        userRepository->checkUser(user);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Error with user");
+    };
+
+    user.setIsLogin(true);
+    try {
+        userRepository->updateUser(user);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Cannot login user");
+    };
+    return std::make_pair(ApplicationErrors::success, std::to_string(user.getId()));
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::registerUser(UserParams& prm) {
-    return std::make_pair(ApplicationErrors::success, "User was successfully registred");
+    User user;
+    user.setName(prm.p1.str);
+    user.setPassword(prm.p2.str);
+    cout << user.getName() << endl << user.getPassword() << endl;
+    try {
+        userRepository->createUser(user);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Error with creating user");
+    };
+
+    std::cout << "User was successfully created with id " + std::to_string(user.getId()) << std::endl;
+    return std::make_pair(ApplicationErrors::success, std::to_string(user.getId()));
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::logoutUser(UserParams& prm){
+std::pair<ApplicationErrors, std::string> ServerApplication::logoutUser(UserParams& prm) {
+    shared_ptr<User> user;
+    try {
+        user = userRepository->getById(prm.p1.num);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Error with user");
+    };
+    user->setIsLogin(false);
+    try {
+        userRepository->updateUser(*user);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Cannot logout user");
+    };
     return std::make_pair(ApplicationErrors::success, "User was successfully logouted");
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::updateUser(UserParams& prm) {
+    shared_ptr<User> user;
+    try {
+        user = userRepository->getById(prm.p1.num);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Error with user");
+    };
+
+    string userData = string(prm.p2.str);
+    int spacePos = userData.find(" ");
+    user->setName(userData.substr(0, spacePos));
+    user->setPassword(userData.substr(spacePos + 1));
+    try {
+        userRepository->updateUser(*user);
+    } catch(const std::exception& error) {
+        std::cout << error.what() << std::endl;
+        return std::make_pair(ApplicationErrors::failure, "Cannot update user");
+    };
     return std::make_pair(ApplicationErrors::success, "User was successfully updated");
 }
 
