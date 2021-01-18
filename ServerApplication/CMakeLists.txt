@@ -16,8 +16,8 @@ add_library(ServerApplication STATIC ${sources} src/Editor.cpp include/EditorMan
 target_include_directories(ServerApplication PUBLIC ${PROJECT_SOURCE_DIR}/src)
 target_link_libraries(ServerApplication PUBLIC Utils DB)
 
-#add_executable(main.out main.cpp)
-#target_link_libraries(main.out ServerApplication Utils DB)
+add_executable(main.out main.cpp)
+target_link_libraries(main.out ServerApplication Utils DB)
 
 #add_executable(test_server ${test_source})
 #target_link_libraries(test_server  ServerApplication ${GTEST_LIBRARIES})

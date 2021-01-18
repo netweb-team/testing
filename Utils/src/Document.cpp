@@ -26,3 +26,11 @@ void Document::addOwner(int idEditor) {
     }
     owners.push_back(idEditor);
 }
+
+std::string Document::getName(void) {
+    return name;
+}
+
+void Document::setName(const std::string& newName) {
+    name = newName;
+}

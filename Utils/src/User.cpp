@@ -9,38 +9,41 @@ User::~User() {
 }
 
 void User::setId(int newId) {
-
+  Id = newId;
 }
 
 int User::getId() {
-  return int();
+  return Id;
 }
 
-void User::setName(std::string newName) {
-
+void User::setName(const std::string& newName) {
+  name = newName;
 }
 
 std::string User::getName() {
-  return std::string();
+  return name;
 }
 
-void User::setPassword(std::string newPassword) {
-
+void User::setPassword(const std::string& newPassword) {
+  password = newPassword;
 }
 
 std::string User::getPassword() {
-  return std::string();
+  return password;
 }
 
-void User::addDocument(int id, std::string password) {
-
+void User::addDocument(int id) {
+  idDocument.push_back(id);
 }
 
 void User::deleteDocument(int id) {
-
+  return;
 }
 
-Document User::getDocumentById(int id) {
-  return Document(id, "");
+bool User::getIsLogin(void) {
+  return isLogin;
 }
 
+void User::setIsLogin(bool flag) {
+  isLogin = flag;
+}

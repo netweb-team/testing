@@ -12,6 +12,7 @@ class User {
   std::string name;
   std::string password;
   std::vector<int> idDocument;
+  bool isLogin;
 
  public:
   User();
@@ -22,19 +23,21 @@ class User {
 
   int getId();
 
-  void setName(std::string newName);
+  void setName(const std::string& newName);
 
   std::string getName();
 
-  void setPassword(std::string newPassword);
+  void setPassword(const std::string& newPassword);
 
   std::string getPassword();
 
-  void addDocument(int id, std::string password);
+  void addDocument(int id);
 
   void deleteDocument(int id);
 
-  Document getDocumentById(int id);
+  bool getIsLogin(void);
+
+  void setIsLogin(bool flag);
 
 };
 

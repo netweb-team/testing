@@ -32,11 +32,26 @@ int main(int argc, const char * argv[]) {
 
 
     std::shared_ptr<ServerApplication> server = ServerApplication::get_instance();
-    int idDoc = 10;
-    server->connectDocument(10, idDoc);
-    server->updateDocument(10, idDoc, 0, "kekek");
-    auto res = server->getTextDocument(idDoc);
-    std::cout << "response: " << res.second << std::endl;
+    UserParams prms = {};
+    prms.p1.str = (char*) string("login3").c_str();
+    prms.p2.str = (char*) string("my_pass").c_str();
+    pair<ApplicationErrors, string> result = server->registerUser(prms);
+    cout << result.second << endl;
+    UserParams prms2 = { 3 };
+    result = server->logoutUser(prms2);
+    cout << result.second << endl;
+    result = server->loginUser(prms);
+    cout << result.second << endl;
+
+    DocumentParams dprms = { 2 };
+    dprms.p2.str = (char*) string("docNAme").c_str();
+    //server->createDocument(dprms);
+    dprms.p2.num = 2;
+    server->connectDocument(dprms);
+    dprms.p3.str = (char*) string("0,kekek,0").c_str();
+    server->updateDocument(dprms);
+    result = server->getTextDocument(dprms);
+    std::cout << "response: " << result.second << std::endl;
 
 //    server->connectDocument(1, 100);
 //    server->connectDocument(3, 1);
@@ -45,7 +60,5 @@ int main(int argc, const char * argv[]) {
 //    server->connectDocument(2, 1);
 //    server->updateDocument(1, 1, 0, "-1,Hello,2");
 //    server->updateDocument(3, 30, "7,MAN");
-
-    std::cout << "\nHello, World!\n" << std::endl;
     return 0;
 }
