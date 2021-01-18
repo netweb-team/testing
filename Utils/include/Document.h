@@ -20,6 +20,11 @@ public:
             id(idDocument),
             password(std::string()),
             text{std::move(textDocument)} { };
+            
+    Document(int idDocument, const std::string& pass, const std::string& textDocument):
+            id(idDocument),
+            password{pass},
+            text{textDocument} { };
 
     Document(const Document &document): id(document.id), password(document.password), text(document.text)
     { }
