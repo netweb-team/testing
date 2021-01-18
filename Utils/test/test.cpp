@@ -90,6 +90,7 @@
 
 #include "DocumentBuilder.h"
 #include "OperationBuilder.h"
+#include "UserBuilder.h"
 
 int main(int argc, char** argv) {
   //::testing::InitGoogleMock(&argc, argv);
