@@ -16,6 +16,12 @@ class User {
 
  public:
   User();
+  User(int Id, std::string& name, std::string& pass, std::vector<int> idDocument, bool flag):
+            Id(Id),
+            name(name),
+            password(pass),
+            idDocument(idDocument),
+            isLogin(flag) { };
 
   ~User();
 

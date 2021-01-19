@@ -6,30 +6,11 @@
 #include "../../DB/include/DBController.h"
 #include "../../DB/include/DocumentRepository.h"
 #include "../../DB/include/UserRepository.h"
+#include "structs.h"
 
 enum class ApplicationErrors {
     failure,
     success,
-};
-
-union param
-{
-    int num;
-    char *str;
-};
-
-struct DocumentParams 
-{
-    param p1;
-    param p2;
-    param p3;
-    param p4;
-};
-
-struct UserParams
-{
-    param p1;
-    param p2;
 };
 
 class BaseServerApplication {
