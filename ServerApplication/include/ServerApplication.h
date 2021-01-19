@@ -53,6 +53,9 @@ public:
 
 class ServerApplication: public BaseServerApplication {
 protected:
+    std::shared_ptr<DocumentRepository> docRepository;
+    std::shared_ptr<UserRepository> userRepository;
+
     ServerApplication(): sessions(0) {
         auto controller = std::make_shared<DBController>();
         docRepository = std::make_shared<DocumentRepository>(controller);
@@ -85,9 +88,6 @@ public:
 private:
     static std::shared_ptr<ServerApplication> instance;
     std::deque<std::shared_ptr<Session>> sessions;
-
-    std::shared_ptr<DocumentRepository> docRepository;
-    std::shared_ptr<UserRepository> userRepository;
 
 //    std::shared_ptr<DBController> controller;
 

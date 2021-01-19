@@ -22,6 +22,10 @@ target_link_libraries(ServerApplication PUBLIC Utils DB)
 add_executable(main.out main.cpp)
 target_link_libraries(main.out ServerApplication Utils DB)
 
+add_executable(test_usecase ${PROJECT_SOURCE_DIR}/test/test_usecase.cpp)
+target_link_libraries(test_usecase ServerApplication Utils DB)
+target_link_libraries(test_usecase ${GTEST_LIBRARIES} -lgmock pthread)
+
 #add_executable(test_server ${test_source})
 #target_link_libraries(test_server  ServerApplication ${GTEST_LIBRARIES})
 #target_link_libraries(test_server -lgmock pthread)

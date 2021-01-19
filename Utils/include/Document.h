@@ -19,12 +19,12 @@ public:
     Document(int idDocument, std::string&& textDocument):
             id(idDocument),
             name(std::string()),
-            text{std::move(textDocument)} { };
+            text(std::move(textDocument)) { };
             
     Document(int idDocument, const std::string& pass, const std::string& textDocument):
             id(idDocument),
-            name{pass},
-            text{textDocument} { };
+            name(pass),
+            text(textDocument) { };
 
     Document(std::shared_ptr<Document>& document) :
             id(document->getId()), text(document->getText()),

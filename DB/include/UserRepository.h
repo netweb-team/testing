@@ -22,6 +22,7 @@ public:
 class UserRepository : public UserRepositoryI
 {
 public:
+    UserRepository() = default;
     UserRepository(shared_ptr<AbstractDBController> ctrl);
     ~UserRepository();
 

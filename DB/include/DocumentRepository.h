@@ -25,6 +25,7 @@ public:
 class DocumentRepository : public DocumentRepositoryI
 {
 public:
+    DocumentRepository() = default;
     DocumentRepository(shared_ptr<AbstractDBController> ctrl);
     ~DocumentRepository();
 
