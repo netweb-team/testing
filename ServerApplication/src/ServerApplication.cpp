@@ -1,10 +1,10 @@
 #include "ServerApplication.h"
 
-std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(DocumentParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(const DocumentParams& prm) {
     Document doc;
     doc.setName(prm.p2.str);
     try {
-        docRepository->createDoc(doc);
+        docRepository->create(doc);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Error with creating document");;
@@ -14,7 +14,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::createDocument(Docu
     return std::make_pair(ApplicationErrors::success, std::to_string(doc.getId()));
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(DocumentParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(const DocumentParams& prm) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == prm.p2.num) {
             // TODO:- From std::string to Operation
@@ -35,7 +35,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::updateDocument(Docu
     return std::make_pair(ApplicationErrors::failure, "Document is not open");
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::getTextDocument(DocumentParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::getTextDocument(const DocumentParams& prm) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == prm.p1.num) {
 
@@ -45,17 +45,27 @@ std::pair<ApplicationErrors, std::string> ServerApplication::getTextDocument(Doc
     return std::make_pair(ApplicationErrors::failure, "Document is not open");
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(DocumentParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(const DocumentParams& prm) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == prm.p1.num) {
             i = sessions.erase(i);
+            try
+            {
+                Document document((*i)->getIdDocument(), (*i)->getDocumentText());
+                docRepository->deleteD(document);
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << e.what() << '\n';
+                return std::make_pair(ApplicationErrors::failure, "Error with document delete");
+            }
             return std::make_pair(ApplicationErrors::success, "Document was successfully deleted");
         }
     }
     return std::make_pair(ApplicationErrors::failure, "This document does not exist");
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(DocumentParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(const DocumentParams& prm) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == prm.p2.num) {
             (*i)->addEditor(prm.p1.num);
@@ -65,12 +75,12 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(Doc
 
     std::shared_ptr<Document> document;
     try {
-        std::cout << docRepository->getById(prm.p2.num)->getId() << " " << docRepository->getById(prm.p2.num)->getText() << std::endl;
-        document = docRepository->getById(prm.p2.num);
+        std::cout << docRepository->getId(prm.p2.num)->getId() << " " << docRepository->getId(prm.p2.num)->getText() << std::endl;
+        document = docRepository->getId(prm.p2.num);
     } catch(const std::exception& error) {
         std::cout << "Document was not created" << std::endl;
-        return std::make_pair(ApplicationErrors::failure, "Document was not created");;
-    };
+        return std::make_pair(ApplicationErrors::failure, "Document was not created");
+    }
     std::shared_ptr<EditorManager> editorManager(new EditorManager(document));
     std::shared_ptr<Session> session(new Session(document->getId(), editorManager));
     session->addEditor(prm.p1.num);
@@ -78,7 +88,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::connectDocument(Doc
     return std::make_pair(ApplicationErrors::success, session->getDocumentText());
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::disconnectDocument(DocumentParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::disconnectDocument(const DocumentParams& prm) {
     for (auto i = sessions.begin(); i != sessions.end(); i++) {
         if ((*i)->getIdDocument() == prm.p2.num) {
             (*i)->removeEditor(prm.p1.num);
@@ -96,24 +106,24 @@ std::pair<ApplicationErrors, std::string> ServerApplication::disconnectDocument(
     return std::make_pair(ApplicationErrors::failure, "This session does not exist");
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::saveDocument(DocumentParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::saveDocument(const DocumentParams& prm) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == prm.p1.num) {
             // Some id editor
             Document document((*i)->getIdDocument(), (*i)->getDocumentText());
-            docRepository->changeDoc(document);
+            docRepository->change(document);
             return std::make_pair(ApplicationErrors::success, "Document has been saved");
         }
     }
     return std::make_pair(ApplicationErrors::failure, "Document does not exist");
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(UserParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(const UserParams& prm) {
     User user;
     user.setName(prm.p1.str);
     user.setPassword(prm.p2.str);
     try {
-        userRepository->checkUser(user);
+        userRepository->check(user);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Error with user");
@@ -121,7 +131,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(UserParam
 
     user.setIsLogin(true);
     try {
-        userRepository->updateUser(user);
+        userRepository->update(user);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Cannot login user");
@@ -129,13 +139,13 @@ std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(UserParam
     return std::make_pair(ApplicationErrors::success, std::to_string(user.getId()));
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::registerUser(UserParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::registerUser(const UserParams& prm) {
     User user;
     user.setName(prm.p1.str);
     user.setPassword(prm.p2.str);
     cout << user.getName() << endl << user.getPassword() << endl;
     try {
-        userRepository->createUser(user);
+        userRepository->create(user);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Error with creating user");
@@ -145,17 +155,17 @@ std::pair<ApplicationErrors, std::string> ServerApplication::registerUser(UserPa
     return std::make_pair(ApplicationErrors::success, std::to_string(user.getId()));
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::logoutUser(UserParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::logoutUser(const UserParams& prm) {
     shared_ptr<User> user;
     try {
-        user = userRepository->getById(prm.p1.num);
+        user = userRepository->get(prm.p1.num);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Error with user");
     };
     user->setIsLogin(false);
     try {
-        userRepository->updateUser(*user);
+        userRepository->update(*user);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Cannot logout user");
@@ -163,10 +173,10 @@ std::pair<ApplicationErrors, std::string> ServerApplication::logoutUser(UserPara
     return std::make_pair(ApplicationErrors::success, "User was successfully logouted");
 }
 
-std::pair<ApplicationErrors, std::string> ServerApplication::updateUser(UserParams& prm) {
+std::pair<ApplicationErrors, std::string> ServerApplication::updateUser(const UserParams& prm) {
     shared_ptr<User> user;
     try {
-        user = userRepository->getById(prm.p1.num);
+        user = userRepository->get(prm.p1.num);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Error with user");
@@ -177,7 +187,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::updateUser(UserPara
     user->setName(userData.substr(0, spacePos));
     user->setPassword(userData.substr(spacePos + 1));
     try {
-        userRepository->updateUser(*user);
+        userRepository->update(*user);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Cannot update user");

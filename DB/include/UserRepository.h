@@ -13,10 +13,10 @@ class UserRepositoryI
 public:
     UserRepositoryI() = default;
     virtual ~UserRepositoryI() = default;
-    virtual void createTest(User& u) = 0;
-    virtual void updateTest(User& u) = 0;
-    virtual shared_ptr<User> getTest(int id) = 0;
-    virtual void checkTest(User& u) = 0;
+    virtual void create(User& u) = 0;
+    virtual void update(User& u) = 0;
+    virtual shared_ptr<User> get(int id) = 0;
+    virtual void check(User& u) = 0;
 };
 
 class UserRepository : public UserRepositoryI
@@ -31,10 +31,10 @@ public:
     shared_ptr<User> getById(int id);
     void checkUser(User& u);
 
-    virtual void createTest(User& u) { createUser(u); }
-    virtual void updateTest(User& u) { updateUser(u); }
-    virtual shared_ptr<User> getTest(int id) { return getById(id); }
-    virtual void checkTest(User& u) { checkUser(u); }
+    virtual void create(User& u) { createUser(u); }
+    virtual void update(User& u) { updateUser(u); }
+    virtual shared_ptr<User> get(int id) { return getById(id); }
+    virtual void check(User& u) { checkUser(u); }
 
 private:
     shared_ptr<AbstractDBController> db;
