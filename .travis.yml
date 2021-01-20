@@ -14,11 +14,12 @@ install:
   - sudo apt-get install libpqxx-dev
 
   - wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
-  - tar xvfz boost_1_72_0.tar.gz
+  - tar xfz boost_1_72_0.tar.gz
   - rm boost_1_72_0.tar.gz
   - cd boost_1_72_0
-  - ./bootstrap.sh --prefix=/usr --with-python=python3 && ./b2 stage -j4 threading=multi link=shared
-  - sudo ./b2 install threading=multi link=shared     
+  - ./bootstrap.sh --prefix=/usr --with-python=python3 && ./b2 -d0 stage -j4 threading=multi link=shared
+  - sudo ./b2 -d0 install threading=multi link=shared   
+  - cd -
 
   - sudo apt-get install google-mock
   - cd /usr/src/gmock
