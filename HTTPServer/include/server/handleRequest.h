@@ -30,6 +30,12 @@ void handleRequest(http::request<Body, http::basic_fields<Allocator>> &&req,
     controller = std::make_shared<DeleteController>();
   } else if (req.method() == http::verb::post && req.target() == "/create") {
     controller = std::make_shared<CreateController>();
+  } else if (req.method() == http::verb::post && req.target() == "/signup") {
+    controller = std::make_shared<RegistrationController>();
+  } else if (req.method() == http::verb::post && req.target() == "/login") {
+    controller = std::make_shared<LoginController>();
+  } else if (req.method() == http::verb::get && req.target() == "/logout") {
+    controller = std::make_shared<LogoutController>();
   }
   if (controller) {
     http::response<http::string_body> res = controller->handleRequest(move(req));

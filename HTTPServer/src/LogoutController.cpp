@@ -3,6 +3,10 @@
 namespace server {
 
 ServerApplicationOut LogoutController::handle(const string &body) {
-  return server::ServerApplicationOut();
+  std::istringstream is(body);
+  int userId;
+  is >> userId;
+  UserParams logout = { userId };
+  return ServerApplication::get_instance()->logoutUser(logout);
 }
 }
