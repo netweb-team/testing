@@ -121,7 +121,7 @@ public:
         UserBuilder ubuilder;
         User *u = ubuilder.build();
         auto user = make_shared<User>();
-        user->setId(u->getId());
+        user->setId(id);
         user->setName(u->getName());
         user->setPassword(u->getPassword());
         user->setIsLogin(u->getIsLogin());
@@ -131,7 +131,9 @@ public:
     {
         if (u.getName() != "name" && u.getPassword() != "pass")
             throw runtime_error("not exist");
-        return;
+        UserBuilder *ubuilder = (new UserBuilder)->setId(1);
+        u = *ubuilder->build();
+        delete ubuilder;
     }
 };
 
@@ -418,6 +420,147 @@ TEST_F(TestCreateDocument, existed_doc)
     auto res = server.createDocument(dmother->five()->build());
 
     EXPECT_EQ(expected, res);
+}
+
+
+class TestRegisterUser : public ::testing::Test
+{
+protected: 
+    void SetUp()
+    {
+        umother = new UserParMother;
+    }
+
+    void TearDown() 
+    {
+        delete umother;
+    }
+
+    UserParMother *umother;
+    TestServerApplication server;
+};
+
+TEST_F(TestRegisterUser, empty_user)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with user"));
+
+    auto result = server.registerUser(umother->one()->build());
+
+    EXPECT_EQ(expected, result);
+}
+
+TEST_F(TestRegisterUser, good_user)
+{
+    auto expected = make_pair(ApplicationErrors::success, to_string(0));
+
+    auto result = server.registerUser(umother->two()->build());
+
+    EXPECT_EQ(expected, result);
+}
+
+TEST_F(TestRegisterUser, already_exist)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with creating user"));
+
+    auto result = server.registerUser(umother->three()->build());
+
+    EXPECT_EQ(expected, result);
+}
+
+TEST(UpdateUser, empty_user)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with user"));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1N(1)->setP2S("");
+
+    auto result = server.updateUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(UpdateUser, not_exist_user)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with user"));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1N(0)->setP2S("name pass");
+
+    auto result = server.updateUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(UpdateUser, good_user)
+{
+    auto expected = make_pair(ApplicationErrors::success, string("User was successfully updated"));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1N(1)->setP2S("name pass");
+
+    auto result = server.updateUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(LoginUser, not_exist_user)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with user"));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1S("username")->setP2S("password");
+
+    auto result = server.loginUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(LoginUser, exist_user)
+{
+    auto expected = make_pair(ApplicationErrors::success, to_string(0));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1S("name")->setP2S("pass");
+
+    auto result = server.loginUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(LogoutUser, not_exist_user_id)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with user"));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1N(0);
+
+    auto result = server.logoutUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(LogoutUser, unlogged_user)
+{
+    auto expected = make_pair(ApplicationErrors::success, string("User was successfully logouted"));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1N(1);
+
+    auto result = server.logoutUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(LogoutUser, good_user)
+{
+    auto expected = make_pair(ApplicationErrors::success, string("User was successfully logouted"));
+    TestServerApplication server;
+    UserParBuilder *prm = (new UserParBuilder)->setP1N(2);
+
+    auto result = server.logoutUser(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
 }
 
 int main(int argc, char** argv) {

@@ -35,12 +35,18 @@ struct UserParams UserParBuilder::build() {
 
 UserParBuilder* UserParMother::one() {
     UserParBuilder *doc = new UserParBuilder();
-    doc->setP1N(1)->setP2S("2");
+    doc->setP1S("")->setP2S("");
     return doc;
 }
 
 UserParBuilder* UserParMother::two() {
     UserParBuilder *doc = new UserParBuilder();
-    doc->setP1N(1)->setP2S("2");
+    doc->setP1S("username")->setP2S("password");
+    return doc;
+}
+
+UserParBuilder* UserParMother::three() {
+    UserParBuilder *doc = new UserParBuilder();
+    doc->setP1S("name")->setP2S("pass");
     return doc;
 }

@@ -148,16 +148,19 @@ std::pair<ApplicationErrors, std::string> ServerApplication::loginUser(const Use
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::registerUser(const UserParams& prm) {
+    if (!strcmp(prm.p2.str, "") || !strcmp(prm.p1.str, ""))
+        return std::make_pair(ApplicationErrors::failure, "Error with user");
+
     User user;
     user.setName(prm.p1.str);
     user.setPassword(prm.p2.str);
-    cout << user.getName() << endl << user.getPassword() << endl;
+    //cout << user.getName() << endl << user.getPassword() << endl;
     try {
         userRepository->create(user);
     } catch(const std::exception& error) {
         std::cout << error.what() << std::endl;
         return std::make_pair(ApplicationErrors::failure, "Error with creating user");
-    };
+    }
 
     std::cout << "User was successfully created with id " + std::to_string(user.getId()) << std::endl;
     return std::make_pair(ApplicationErrors::success, std::to_string(user.getId()));
@@ -182,6 +185,9 @@ std::pair<ApplicationErrors, std::string> ServerApplication::logoutUser(const Us
 }
 
 std::pair<ApplicationErrors, std::string> ServerApplication::updateUser(const UserParams& prm) {
+    if (!strcmp(prm.p2.str, ""))
+        return std::make_pair(ApplicationErrors::failure, "Error with user");
+
     shared_ptr<User> user;
     try {
         user = userRepository->get(prm.p1.num);

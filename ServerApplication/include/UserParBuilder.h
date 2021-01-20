@@ -22,6 +22,7 @@ class UserParMother {
 public:
     static UserParBuilder* one();
     static UserParBuilder* two();
+    static UserParBuilder* three();
 };
 
 #endif //DOCUMENT_PAR_BUILDER_H

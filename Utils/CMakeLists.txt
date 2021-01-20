@@ -20,6 +20,6 @@ add_library(Utils STATIC ${sources})
 target_include_directories(Utils PUBLIC ${PROJECT_SOURCE_DIR}/src)
 target_include_directories(Utils PUBLIC ${Boost_INCLUDE_DIR})
 
-add_executable(gtest ${test_source})
+#add_executable(gtest ${test_source})
 #target_link_libraries(gtest  Utils ServerApplication ${GTEST_LIBRARIES} pthread)
 #target_link_libraries(gtest -lgmock)
