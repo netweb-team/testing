@@ -1,0 +1,16 @@
+{
+  "name": "Shared-notes",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd build && cmake .. && make",
+    "run": "cd build/HTTPServer/server && ./server",
+    "run-testusecase": "cd build/ServerApplication && ./test_usecase"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/netweb-team/testing/tree/main"
+  },
+  "dependencies": {},
+  "devDependencies": {
+  }
+}

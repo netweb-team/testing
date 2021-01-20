@@ -1,0 +1,41 @@
+language:
+  - c
+  - cpp
+
+compiler:
+  - gcc
+
+os:
+  - linux
+
+install:
+  - sudo apt-get update
+  - sudo apt-get install cmake
+  - sudo apt-get install libpqxx-dev
+
+  - wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
+  - tar xvfz boost_1_72_0.tar.gz
+  - rm boost_1_72_0.tar.gz
+  - cd boost_1_72_0
+  - ./bootstrap.sh --prefix=/usr --with-python=python3 && ./b2 stage -j4 threading=multi link=shared
+  - sudo ./b2 install threading=multi link=shared     
+
+  - sudo apt-get install google-mock
+  - cd /usr/src/gmock
+  - sudo cmake CMakeLists.txt
+  - sudo make
+  - sudo cp *.a /usr/lib
+  - cd -
+
+before_tests:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+
+tests:
+  - cd build/ServerApplication
+  - ./test_usecase
+
+after_tests:
+  - make clean
