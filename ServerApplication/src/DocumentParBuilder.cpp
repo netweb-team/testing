@@ -66,3 +66,21 @@ DocumentParBuilder* DocumentParMother::two() {
     doc->setP1N(1)->setP2N(2)->setP3S("3")->setP4S("4");
     return doc;
 }
+
+DocumentParBuilder* DocumentParMother::three() {
+    DocumentParBuilder *doc = new DocumentParBuilder;
+    doc->setP1N(1)->setP2S("");
+    return doc;
+}
+
+DocumentParBuilder* DocumentParMother::four() {
+    DocumentParBuilder *doc = new DocumentParBuilder;
+    doc->setP1N(1)->setP2S("doc_name");
+    return doc;
+}
+
+DocumentParBuilder* DocumentParMother::five() {
+    DocumentParBuilder *doc = new DocumentParBuilder;
+    doc->setP1N(1)->setP2S("name");
+    return doc;
+}

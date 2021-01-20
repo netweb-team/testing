@@ -16,18 +16,19 @@ public:
     
     DocumentBuilder* setId(int newId);
     DocumentBuilder* updateText(std::shared_ptr<Operation> operation);
-    DocumentBuilder* setPass(std::string pass);
+    DocumentBuilder* setName(std::string pass);
     Document* build();
     
     int id;
     std::string text;
-    std::string password;
+    std::string name;
 };
 
 class DocumentMother {
 public:
     static DocumentBuilder* one();
     static DocumentBuilder* two();
+    static DocumentBuilder* three();
 };
 
 #endif //DOCUMENT_BUILDER_H_

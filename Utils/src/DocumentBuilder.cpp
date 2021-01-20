@@ -3,7 +3,7 @@
 DocumentBuilder::DocumentBuilder() {
     this->id = 0;
     this->text = "";
-    this->password = "";
+    this->name = "";
 }
 
 DocumentBuilder::~DocumentBuilder() {
@@ -22,25 +22,31 @@ DocumentBuilder* DocumentBuilder::updateText(std::shared_ptr<Operation> operatio
     return this;
 }
 
-DocumentBuilder* DocumentBuilder::setPass(std::string pass) {
-    this->password = pass;
+DocumentBuilder* DocumentBuilder::setName(std::string pass) {
+    this->name = pass;
     return this;
 }
 
 Document* DocumentBuilder::build() {
-    return new Document(this->id, this->password, this->text);
+    return new Document(this->id, this->name, this->text);
 }
 
 DocumentBuilder* DocumentMother::one() {
     std::shared_ptr<Operation> oper = std::make_shared<Operation>();
     DocumentBuilder *doc = new DocumentBuilder();
-    doc->setId(1)->updateText(oper)->setPass("123");
+    doc->setId(1)->updateText(oper)->setName("123");
     return doc;
 }
 
 DocumentBuilder* DocumentMother::two() {
     std::shared_ptr<Operation> oper = std::make_shared<Operation>();
     DocumentBuilder *doc = new DocumentBuilder();
-    doc->setId(2)->updateText(oper)->setPass("456");
+    doc->setId(2)->updateText(oper)->setName("456");
+    return doc;
+}
+
+DocumentBuilder* DocumentMother::three() {
+    DocumentBuilder *doc = new DocumentBuilder;
+    doc->setId(3)->setName("");
     return doc;
 }

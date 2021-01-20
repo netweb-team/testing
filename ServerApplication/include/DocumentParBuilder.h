@@ -26,6 +26,9 @@ class DocumentParMother {
 public:
     static DocumentParBuilder* one();
     static DocumentParBuilder* two();
+    static DocumentParBuilder* three();
+    static DocumentParBuilder* four();
+    static DocumentParBuilder* five();
 };
 
 #endif //DOCUMENT_PAR_BUILDER_H

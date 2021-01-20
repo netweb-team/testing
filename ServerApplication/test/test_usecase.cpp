@@ -45,7 +45,7 @@ public:
     {
         if (d.getId() < 1)
             throw runtime_error("not exist");
-        else if (d.getId() > 10)
+        else if (d.getId() > 5)
             throw runtime_error("error id");
         DocumentBuilder dbuilder;
         d = *dbuilder.build();
@@ -54,7 +54,7 @@ public:
     {
         if (d.getId() < 1)
             throw runtime_error("not exist");
-        else if (d.getId() > 10)
+        else if (d.getId() > 5)
             throw runtime_error("error id");
         return;
     }
@@ -258,12 +258,167 @@ TEST(GetDocument, good_doc_id)
     delete prm;
 }
 
-/*TEST(CreateDocument, empty_doc_name)
+TEST(DeleteDocument, not_connected_doc)
 {
-    DocumentParams prm = { 1, 1 };
-    TestServerApplication tsa;
-    tsa.connectDocument(prm);
-}*/
+    auto expected = make_pair(ApplicationErrors::failure, string("This document does not exist"));
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1);
+    TestServerApplication server; 
+
+    auto result = server.deleteDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(DeleteDocument, not_existed_doc_id)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with document delete"));
+    TestServerApplication server; 
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1)->setP2N(8);
+    server.connectDocument(prm->build());
+    prm->setP1N(prm->params.p2.num);
+
+    auto result = server.deleteDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(DeleteDocument, good_doc_id)
+{
+    auto expected = make_pair(ApplicationErrors::success, string("Document was successfully deleted"));
+    TestServerApplication server; 
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1)->setP2N(2);
+    server.connectDocument(prm->build());
+    prm->setP1N(prm->params.p2.num);
+
+    auto result = server.deleteDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(SaveDocument, not_connected_doc)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Document does not exist"));
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1);
+    TestServerApplication server; 
+
+    auto result = server.saveDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(SaveDocument, not_existed_doc_id)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with document save"));
+    TestServerApplication server; 
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1)->setP2N(8);
+    server.connectDocument(prm->build());
+    prm->setP1N(prm->params.p2.num);
+
+    auto result = server.saveDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(SaveDocument, good_doc_id)
+{
+    auto expected = make_pair(ApplicationErrors::success, string("Document has been saved"));
+    TestServerApplication server; 
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1)->setP2N(2);
+    server.connectDocument(prm->build());
+    prm->setP1N(prm->params.p2.num);
+
+    auto result = server.saveDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(UpdateDocument, not_connected_doc)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Document is not open"));
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1)->setP2N(1)->setP3S("");
+    TestServerApplication server; 
+
+    auto result = server.updateDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(UpdateDocument, empty_operation)
+{
+    auto expected = make_pair(ApplicationErrors::success, string("Change sent successfully"));
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1)->setP2N(1)->setP3S(" ");
+    TestServerApplication server; 
+    server.connectDocument(prm->build());
+
+    auto result = server.updateDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+TEST(UpdateDocument, one_operation)
+{
+    auto expected = make_pair(ApplicationErrors::success, string("Change sent successfully"));
+    DocumentParBuilder *prm = (new DocumentParBuilder())->setP1N(1)->setP2N(1)->setP3S("0,a");
+    TestServerApplication server; 
+    server.connectDocument(prm->build());
+
+    auto result = server.updateDocument(prm->build());
+
+    EXPECT_EQ(expected, result);
+    delete prm;
+}
+
+class TestCreateDocument : public ::testing::Test
+{
+protected: 
+    void SetUp()
+    {
+        dmother = new DocumentParMother;
+    }
+
+    void TearDown() 
+    {
+        delete dmother;
+    }
+
+    DocumentParMother *dmother;
+    TestServerApplication server;
+};
+
+TEST_F(TestCreateDocument, empty_doc_name)
+{
+    auto expected = make_pair(ApplicationErrors::success, to_string(0));
+
+    auto res = server.createDocument(dmother->three()->build());
+
+    EXPECT_EQ(expected, res);
+}
+
+TEST_F(TestCreateDocument, good_doc)
+{
+    auto expected = make_pair(ApplicationErrors::success, to_string(0));
+
+    auto res = server.createDocument(dmother->four()->build());
+
+    EXPECT_EQ(expected, res);
+}
+
+TEST_F(TestCreateDocument, existed_doc)
+{
+    auto expected = make_pair(ApplicationErrors::failure, string("Error with creating document"));
+
+    auto res = server.createDocument(dmother->five()->build());
+
+    EXPECT_EQ(expected, res);
+}
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleMock(&argc, argv);

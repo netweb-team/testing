@@ -48,7 +48,6 @@ std::pair<ApplicationErrors, std::string> ServerApplication::getTextDocument(con
 std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(const DocumentParams& prm) {
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == prm.p1.num) {
-            i = sessions.erase(i);
             try
             {
                 Document document((*i)->getIdDocument(), (*i)->getDocumentText());
@@ -59,6 +58,7 @@ std::pair<ApplicationErrors, std::string> ServerApplication::deleteDocument(cons
                 std::cerr << e.what() << '\n';
                 return std::make_pair(ApplicationErrors::failure, "Error with document delete");
             }
+            i = sessions.erase(i);
             return std::make_pair(ApplicationErrors::success, "Document was successfully deleted");
         }
     }
@@ -110,8 +110,16 @@ std::pair<ApplicationErrors, std::string> ServerApplication::saveDocument(const 
     for (auto i = sessions.cbegin(); i != sessions.cend(); i++) {
         if ((*i)->getIdDocument() == prm.p1.num) {
             // Some id editor
-            Document document((*i)->getIdDocument(), (*i)->getDocumentText());
-            docRepository->change(document);
+            try
+            {
+                Document document((*i)->getIdDocument(), (*i)->getDocumentText());
+                docRepository->change(document);
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << e.what() << '\n';
+                return std::make_pair(ApplicationErrors::failure, "Error with document save");
+            }
             return std::make_pair(ApplicationErrors::success, "Document has been saved");
         }
     }
