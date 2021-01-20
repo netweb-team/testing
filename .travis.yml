@@ -28,15 +28,14 @@ install:
   - sudo cp *.a /usr/lib
   - cd -
 
-before_tests:
+before_script:
   - mkdir build
   - cd build
   - cmake ..
   - make
 
-tests:
-  - cd build/ServerApplication
-  - ./test_usecase
+script:
+  - ./ServerApplication/test_usecase
 
-after_tests:
+after_script:
   - make clean
