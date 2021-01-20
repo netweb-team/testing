@@ -12,7 +12,12 @@ install:
   - sudo apt-get update
   - sudo apt-get install cmake
   - sudo apt-get install libpqxx-dev
-
+  - sudo apt-get install libgtest-dev
+  - cd /usr/src/gtest
+  - sudo cmake .
+  - sudo make
+  - sudo cp *.a /usr/lib
+  - cd -
   - wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz
   - tar xfz boost_1_72_0.tar.gz
   - rm boost_1_72_0.tar.gz
@@ -20,7 +25,6 @@ install:
   - ./bootstrap.sh --prefix=/usr --with-python=python3 && ./b2 -d0 stage -j4 threading=multi link=shared
   - sudo ./b2 -d0 install threading=multi link=shared   
   - cd -
-
   - sudo apt-get install google-mock
   - cd /usr/src/gmock
   - sudo cmake CMakeLists.txt
