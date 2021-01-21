@@ -38,9 +38,9 @@ install:
   - sudo -i -u postgres
   - sudo -u postgres createuser --interactive
   - sudo -u postgres createdb comred
-  - cp -f ./scripts.sql /var/lib/postgresql/scripts.sql
+  - sudo cp -f ./scripts.sql /var/lib/postgresql/scripts.sql
   - sudo -i -u postgres
-  - psql -U postgres -d comred -a -f scripts.sql
+  - sudo psql -U postgres -d comred -a -f scripts.sql
 
 before_script:
   - mkdir build
