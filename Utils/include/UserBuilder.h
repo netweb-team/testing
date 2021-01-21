@@ -34,6 +34,7 @@ class UserMother {
 public:
     static UserBuilder* one();
     static UserBuilder* two();
+    static UserBuilder* three();
 };
 
 #endif //OPERATION_BUILDER_H_
