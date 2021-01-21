@@ -57,18 +57,6 @@ TEST_F(TestCreateDocument, good_doc)
     delete dbuilder;
 }
 
-TEST_F(TestCreateDocument, already_exist_doc)
-{
-    DocumentBuilder *dbuilder = docMother->one();
-    Document *doc = dbuilder->build();
-
-    docRepo->createDoc(*doc);
-
-    EXPECT_THROW(docRepo->createDoc(*doc), runtime_error);
-    delete doc;
-    delete dbuilder;
-}
-
 class TestDocumentRepo : public ::testing::Test
 {
 protected:
@@ -91,9 +79,6 @@ protected:
 
 bool cmpDocument(Document& l, Document& r)
 {
-    cout << l.getId() << " " << r.getId() << endl;
-    cout << l.getName() << endl << r.getName() << endl;
-    cout << l.getText() << endl << r.getText() << endl;
     if (l.getId() == r.getId() && l.getName() == r.getName()
         && l.getText() == r.getText())
         return true;
