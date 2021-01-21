@@ -8,6 +8,9 @@ compiler:
 os:
   - linux
 
+services:
+  - postgresql
+
 install:
   - sudo apt-get update
   - sudo apt-get install cmake
@@ -31,15 +34,11 @@ install:
   - sudo make
   - sudo cp *.a /usr/lib
   - cd -
-  - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-  - echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
-  - sudo apt update
-  - sudo apt install postgresql postgresql-contrib -y
-  - sudo -u postgres psql
-  - create database comred;
-  - \c comred
-  - \i script.sql
-  - \q
+
+before_script:
+  - psql -c "CREATE DATABASE comred;" -U postgres
+  - psql -c "ALTER USER postgres WITH PASSWORD '12345678';" -U postgres 
+  - psql "dbname='comred' user='postgres' password='12345678'" -f script.sql
 
 before_script:
   - mkdir build
