@@ -35,3 +35,9 @@ target_link_libraries(server
             ${CMAKE_THREAD_LIBS_INIT}
             ServerApplication Utils
         )
+
+add_library(Client STATIC ${PROJECT_SOURCE_DIR}/src/client/httpClient.cpp)
+target_include_directories(Client PUBLIC ${PROJECT_SOURCE_DIR}/src/client)
+
+add_executable(test_e2e ${PROJECT_SOURCE_DIR}/test/test_e2e.cpp)
+target_link_libraries(test_e2e ${CMAKE_THREAD_LIBS_INIT} Client)
