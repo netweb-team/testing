@@ -51,7 +51,7 @@ before_script:
 script:
   - ./ServerApplication/test_usecase
   - ./DB/test_repo
-  - ./HTTPServer/test_2e2
+  - ./HTTPServer/test_e2e
 
 after_script:
   - make clean
