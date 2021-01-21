@@ -33,12 +33,12 @@ install:
   - cd -
   - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   - echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
-  - apt update
-  - apt install postgresql postgresql-contrib -y
+  - sudo apt update
+  - sudo apt install postgresql postgresql-contrib -y
   - sudo -u postgres createdb comred
-  - cp -f ./scripts.sql /var/lib/postgresql/scripts.sql
+  - sudo cp -f ./scripts.sql /var/lib/postgresql/scripts.sql
   - sudo -i -u postgres
-  - psql -U postgres -d comred -a -f scripts.sql
+  - sudo psql -U postgres -d comred -a -f scripts.sql
 
 before_script:
   - mkdir build
