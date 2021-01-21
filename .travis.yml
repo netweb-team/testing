@@ -39,8 +39,6 @@ before_script:
   - psql -c "CREATE DATABASE comred;" -U postgres
   - psql -c "ALTER USER postgres WITH PASSWORD '12345678';" -U postgres 
   - psql "dbname='comred' user='postgres' password='12345678'" -f script.sql
-
-before_script:
   - mkdir build
   - cd build
   - cmake ..
