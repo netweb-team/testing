@@ -48,6 +48,7 @@ before_script:
 
 script:
   - ./ServerApplication/test_usecase
+  - ./DB/test_repo
 
 after_script:
   - make clean

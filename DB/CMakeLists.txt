@@ -23,6 +23,9 @@ target_include_directories(DB PRIVATE ${PostgreSQL_INCLUDE_DIRS})
 target_link_libraries(DB PRIVATE ${PostgreSQL_LIBRARIES} -lpqxx -lpq)
 target_link_libraries(DB PRIVATE Utils)
 
+set(PQXX_AND_PQ_FLAGS "-I/usr/local/include -L/usr/local/lib")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PQXX_AND_PQ_FLAGS}")
+
 add_executable(test_repo ${PROJECT_SOURCE_DIR}/test/test_repo.cpp)
 target_link_libraries(test_repo DB)
 target_link_libraries(test_repo ${GTEST_LIBRARIES} pthread -lgmock)
