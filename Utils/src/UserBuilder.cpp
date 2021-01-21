@@ -58,3 +58,9 @@ UserBuilder* UserMother::two() {
     user->setId(2)->setName("Test2")->setPassword("pass2")->addIdDocument(1)->addIdDocument(2)->setIsLogin(true);
     return user;
 }
+
+UserBuilder* UserMother::three() {
+    UserBuilder *user = new UserBuilder();
+    user->setId(0)->setName("")->setPassword("")->setIsLogin(false);
+    return user;
+}
