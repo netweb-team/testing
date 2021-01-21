@@ -33,8 +33,8 @@ install:
   - cd -
   - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
   - echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
-  - apt update
-  - apt install postgresql postgresql-contrib -y
+  - sudo apt update
+  - sudo apt install postgresql postgresql-contrib -y
   - sudo -i -u postgres
   - sudo -u postgres createuser --interactive
   - sudo -u postgres createdb comred
@@ -51,6 +51,7 @@ before_script:
 script:
   - ./ServerApplication/test_usecase
   - ./DB/test_repo
+  - ./HTTPServer/test_2e2
 
 after_script:
   - make clean
