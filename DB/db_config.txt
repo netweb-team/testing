@@ -1,10 +1,5 @@
 host=localhost 
 user=postgres
 password=12345678
-<<<<<<< HEAD
 dbname=comred 
 port=5432
-=======
-dbname=comred2
-port=5431
->>>>>>> main
