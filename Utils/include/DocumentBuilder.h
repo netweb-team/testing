@@ -29,6 +29,7 @@ public:
     static DocumentBuilder* one();
     static DocumentBuilder* two();
     static DocumentBuilder* three();
+    static DocumentBuilder* four();
 };
 
 #endif //DOCUMENT_BUILDER_H_

@@ -4,14 +4,13 @@
   "scripts": {
     "build": "cd build && cmake .. && make",
     "run": "cd build/HTTPServer/server && ./server",
-    "run-testusecase": "cd build/ServerApplication && ./test_usecase",
-    "run-testrepo": "cd build/DB && ./test_repo"
+    "run-testusecase": "cd build && ./ServerApplication/test_usecase",
+    "run-testrepo": "cd build && ./DB/test_repo"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/netweb-team/testing/tree/main"
   },
   "dependencies": {},
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

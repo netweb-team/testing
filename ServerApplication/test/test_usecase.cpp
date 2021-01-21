@@ -324,6 +324,7 @@ TEST_F(TestCreateDocument, existed_doc)
 {
     auto expected = make_pair(ApplicationErrors::failure, string("Error with creating document"));
     struct DocumentParams data = dmother->five()->build();
+
     auto res = server.createDocument(data);
 
     EXPECT_EQ(expected, res);
@@ -447,19 +448,6 @@ TEST(LogoutUser, not_exist_user_id)
     auto expected = make_pair(ApplicationErrors::failure, string("Error with user"));
     TestServerApplication server;
     UserParBuilder *prm = (new UserParBuilder)->setP1N(0);
-    struct UserParams data = prm->build();
-
-    auto result = server.logoutUser(data);
-
-    EXPECT_EQ(expected, result);
-    delete prm;
-}
-
-TEST(LogoutUser, unlogged_user)
-{
-    auto expected = make_pair(ApplicationErrors::success, string("User was successfully logouted"));
-    TestServerApplication server;
-    UserParBuilder *prm = (new UserParBuilder)->setP1N(1);
     struct UserParams data = prm->build();
 
     auto result = server.logoutUser(data);
